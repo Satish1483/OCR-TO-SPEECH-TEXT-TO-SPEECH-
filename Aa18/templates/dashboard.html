@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - OCR & TTS Engine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #3f37c9;
+            --accent: #f72585;
+            --dark: #1e293b;
+            --light: #f8f9fa;
+            --success: #4cc9f0;
+            --white: #ffffff;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--white);
+            background-color: var(--light);
+            background-image: url('https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            position: relative;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.9), rgba(63, 55, 201, 0.8));
+            z-index: -1;
+        }
+        
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 16px 0;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            color: var(--white);
+            font-size: 24px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+        
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: var(--transition);
+            font-weight: 500;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background-color: var(--white);
+            transition: var(--transition);
+        }
+        
+        .nav-links a:hover::after {
+            width: 80%;
+        }
+        
+        .content {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+        
+        h1 {
+            color: var(--white);
+            text-align: center;
+            margin-bottom: 40px;
+            font-weight: 700;
+            font-size: 36px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        h1::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -10px;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(to right, var(--accent), var(--primary-light));
+            border-radius: 2px;
+        }
+        
+        h2 {
+            color: var(--white);
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+        }
+        
+        h2 i {
+            margin-right: 12px;
+            font-size: 24px;
+            color: var(--accent);
+        }
+        
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            flex: 1;
+            min-width: 300px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.6s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .upload-area i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .upload-area p {
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--accent);
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+        }
+        
+        .upload-area.active {
+            border-color: var(--accent);
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        .btn {
+            background: linear-gradient(to right, var(--accent), #b5179e);
+            color: var(--white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 15px rgba(247, 37, 133, 0.2);
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(247, 37, 133, 0.3);
+        }
+        
+        .btn:disabled {
+            background: linear-gradient(to right, #95a5a6, #7f8c8d);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+        }
+        
+        .canvas-container {
+            position: relative;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        canvas {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            cursor: crosshair;
+            max-width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .canvas-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            color: var(--white);
+            resize: vertical;
+            margin-bottom: 20px;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+        }
+        
+        .settings {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--white);
+        }
+        
+        select, input[type="range"] {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: var(--white);
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 16px;
+            padding-right: 30px;
+        }
+        
+        input[type="range"] {
+            -webkit-appearance: none;
+            height: 8px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+        }
+        
+        .range-value {
+            display: inline-block;
+            color: var(--white);
+            font-weight: 500;
+        }
+        
+        .audio-controls {
+            margin-top: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        audio {
+            width: 100%;
+            height: 40px;
+            border-radius: 8px;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .info-tooltip {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 18px;
+            height: 18px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            font-size: 12px;
+            margin-left: 8px;
+            cursor: help;
+            position: relative;
+        }
+        
+        .info-tooltip:hover::after {
+            content: attr(data-tip);
+            position: absolute;
+            background: rgba(30, 41, 59, 0.95);
+            padding: 8px 12px;
+            border-radius: 6px;
+            width: 200px;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            line-height: 1.4;
+            z-index: 10;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .welcome-message {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 15px 25px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.6s ease;
+        }
+        
+        .welcome-message p {
+            color: var(--white);
+            font-size: 18px;
+            margin: 0;
+        }
+        
+        .voice-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 5px 10px;
+            margin-top: 10px;
+        }
+        
+        .voice-indicator i {
+            margin-right: 5px;
+        }
+        
+        .voice-indicator span {
+            font-weight: 500;
+        }
+        
+        .premium-badge {
+            background: linear-gradient(to right, var(--success), var(--primary-light));
+            color: var(--white);
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-top: 8px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .text-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+        
+        .text-toolbar-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .text-stats {
+            font-size: 13px;
+            opacity: 0.85;
+        }
+        
+        .btn.secondary {
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: none;
+        }
+        
+        .btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .toast {
+            min-width: 220px;
+            max-width: 320px;
+            background: rgba(15, 23, 42, 0.95);
+            color: #f9fafb;
+            border-radius: 10px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.2s ease-out;
+            font-size: 13px;
+        }
+        
+        .toast-icon {
+            margin-top: 2px;
+        }
+        
+        .toast.toast-success {
+            border-left: 4px solid #22c55e;
+        }
+        
+        .toast.toast-error {
+            border-left: 4px solid #ef4444;
+        }
+        
+        .toast-close {
+            margin-left: auto;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+        
+        .toast-close:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div id="toast-container" class="toast-container"></div>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/home" class="logo"> OCR & TTS Engine</a>
+            <div class="nav-links">
+                <a href="/home"><i class="fas fa-home"></i> Home</a>
+                <a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="/about"><i class="fas fa-info-circle"></i> About</a>
+                <a href="/contact"><i class="fas fa-envelope"></i> Contact</a>
+                <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content">
+        <h1>OCR & Text-to-Speech Dashboard</h1>
+        
+        <div class="welcome-message">
+            <p>Welcome to your OCR dashboard! Here you can upload images, extract text, and convert it to speech.</p>
+        </div>
+        
+        <div class="container">
+            <div class="panel">
+                <h2><i class="fas fa-file-upload"></i> File Upload (Image/PDF)</h2>
+                <div id="upload-area" class="upload-area">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Drag & drop an image or PDF file here, or click to browse</p>
+                    <input type="file" id="file-input" accept="image/*,application/pdf" style="display: none;">
+                </div>
+                
+                <div id="canvas-container" class="canvas-container" style="display: none;">
+                    <canvas id="image-canvas"></canvas>
+                    <p>Click and drag to select a region for OCR</p>
+                    <div class="canvas-actions">
+                        <button id="process-region-btn" class="btn" disabled><i class="fas fa-crop-alt"></i> Process Selected Region</button>
+                        <button id="reset-selection-btn" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Reset</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <h2><i class="fas fa-font"></i> Extracted Text</h2>
+                <div class="text-toolbar">
+                    <div class="text-toolbar-buttons">
+                        <button id="copy-text-btn" class="btn secondary" type="button"><i class="fas fa-copy"></i> Copy</button>
+                        <button id="clear-text-btn" class="btn secondary" type="button"><i class="fas fa-eraser"></i> Clear</button>
+                    </div>
+                    <div id="text-stats" class="text-stats">0 characters • 0 words</div>
+                </div>
+                <textarea id="extracted-text" placeholder="Extracted text will appear here..." readonly></textarea>
+                
+                <div class="settings">
+                    <h3>Voice Settings</h3>
+                    <div class="form-group">
+                        <label for="voice-select">Voice Type <span class="info-tooltip" data-tip="Choose a voice for text-to-speech conversion. Premium voices use Google's TTS service.">i</span></label>
+                        <select id="voice-select">
+                            <option value="default">Default</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="obama">Barack Obama (US Slow)</option>
+                            <option value="billgates">Bill Gates (US)</option>
+                            <option value="morgan">Morgan Freeman (US Deep)</option>
+                            <option value="oprah">Oprah Winfrey (US Female)</option>
+                            <option value="british">British Accent</option>
+                            <option value="australian">Australian Accent</option>
+                        </select>
+                        <div class="premium-badge">Google TTS Voices</div>
+                        <div id="voice-indicator" class="voice-indicator">
+                            <i class="fas fa-user"></i> <span id="voice-name">Default</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="rate-slider">Speech Rate: <span id="rate-value" class="range-value">1.0</span> <span class="info-tooltip" data-tip="Adjust how fast or slow the speech is read">i</span></label>
+                        <input type="range" id="rate-slider" min="0.5" max="2" step="0.1" value="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="volume-slider">Volume: <span id="volume-value" class="range-value">1.0</span> <span class="info-tooltip" data-tip="Adjust the volume level of the speech output">i</span></label>
+                        <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="1">
+                    </div>
+                    
+                    <button id="speak-btn" class="btn" disabled><i class="fas fa-volume-up"></i> Convert to Speech</button>
+                    
+                    <div id="audio-container" class="audio-controls" style="display: none;">
+                        <audio id="audio-player" controls></audio>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Check if user is logged in
+        fetch('/check-auth')
+            .then(response => response.json())
+            .then(data => {
+                if (!data.authenticated) {
+                    window.location.href = '/login';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                window.location.href = '/login';
+            });
+            
+        const uploadArea = document.getElementById('upload-area');
+        const fileInput = document.getElementById('file-input');
+        const canvas = document.getElementById('image-canvas');
+        const canvasContainer = document.getElementById('canvas-container');
+        const ctx = canvas.getContext('2d');
+        const extractedTextArea = document.getElementById('extracted-text');
+        const processRegionBtn = document.getElementById('process-region-btn');
+        const resetSelectionBtn = document.getElementById('reset-selection-btn');
+        const speakBtn = document.getElementById('speak-btn');
+        const audioContainer = document.getElementById('audio-container');
+        const audioPlayer = document.getElementById('audio-player');
+        const voiceSelect = document.getElementById('voice-select');
+        const rateSlider = document.getElementById('rate-slider');
+        const volumeSlider = document.getElementById('volume-slider');
+        const rateValue = document.getElementById('rate-value');
+        const volumeValue = document.getElementById('volume-value');
+        
+        let currentImagePath = null;
+        let originalImage = null;
+        let isSelecting = false;
+        let startX, startY, endX, endY;
+        let selectionBox = null;
+        
+        // Handle drag and drop events
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            uploadArea.classList.add('active');
+        }
+        
+        function unhighlight() {
+            uploadArea.classList.remove('active');
+        }
+        
+        uploadArea.addEventListener('drop', handleDrop, false);
+        uploadArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', handleFileSelect);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files.length > 0) {
+                // Accept images and PDFs
+                const type = files[0].type;
+                if (type.match('image.*') || type === 'application/pdf') {
+                    handleFiles(files);
+                } else {
+                    alert('Please upload an image or PDF file');
+                }
+            }
+        }
+        
+        function handleFileSelect(e) {
+            const files = e.target.files;
+            
+            if (files.length > 0) {
+                handleFiles(files);
+            }
+        }
+        
+        function handleFiles(files) {
+            const file = files[0];
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Show loading indicator
+            uploadArea.innerHTML = '<div class="loading"></div><p>Processing...</p>';
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => {
+                        throw new Error(data.error || 'Upload failed');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    uploadArea.innerHTML = '<i class="fas fa-cloud-upload-alt"></i><p>Drag & drop an image or PDF here, or click to browse</p>';
+                    return;
+                }
+
+                // Check if this is a PDF upload (has file_path or file_type is pdf)
+                const isPDF = data.file_type === 'pdf' || (data.file_path && !data.image_path);
+                
+                if (isPDF || data.file_path || data.audio_path) {
+                    currentImagePath = data.file_path || data.image_path;
+                    extractedTextArea.value = data.text || '';
+                    speakBtn.disabled = false;
+
+                    const fileTypeIcon = isPDF ? '<i class="fas fa-file-pdf"></i>' : '<i class="fas fa-file"></i>';
+                    uploadArea.innerHTML = `
+                        ${fileTypeIcon}
+                        <p><strong>Uploaded:</strong> ${file.name}</p>
+                        <p style="font-size:0.9rem; opacity:0.85;">${isPDF ? 'PDF text extracted and converted to speech.' : 'Text extracted from file.'}</p>
+                    `;
+
+                    if (data.audio_path) {
+                        audioPlayer.src = `/audio/${data.audio_path}`;
+                        audioContainer.style.display = 'flex';
+                    } else if (isPDF && data.text) {
+                        // PDF processed but audio not generated - show message
+                        console.log('PDF text extracted but audio not generated');
+                    }
+
+                    // Hide canvas for non-image uploads (PDFs)
+                    canvasContainer.style.display = 'none';
+                    uploadArea.style.display = 'block';
+
+                    return;
+                }
+
+                // Otherwise assume an image response
+                currentImagePath = data.image_path;
+                extractedTextArea.value = data.text;
+                speakBtn.disabled = false;
+
+                // Create image URL properly, ensure there's no uploads/uploads duplication
+                const imageUrl = `/uploads/${currentImagePath}`;
+
+                // Show the image in upload area while loading
+                uploadArea.innerHTML = `
+                    <div class="loading"></div>
+                    <p>Loading image...</p>
+                `;
+
+                // Load image on canvas with better error handling
+                originalImage = new Image();
+                originalImage.onload = function() {
+                    // Update status
+                    uploadArea.innerHTML = `
+                        <p>Image loaded successfully!</p>
+                        <img src="${imageUrl}" alt="Uploaded image" style="max-width: 90%; max-height: 200px; margin-top: 15px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                    `;
+
+                    // Set canvas dimensions
+                    const maxWidth = uploadArea.offsetWidth;
+                    let width = originalImage.width;
+                    let height = originalImage.height;
+
+                    if (width > maxWidth) {
+                        const ratio = maxWidth / width;
+                        width = maxWidth;
+                        height = height * ratio;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    // Draw image
+                    ctx.drawImage(originalImage, 0, 0, width, height);
+
+                    // Show canvas container
+                    canvasContainer.style.display = 'block';
+                    uploadArea.style.display = 'none';
+                };
+
+                // Better error handling for image loading
+                originalImage.onerror = function() {
+                    console.error("Failed to load image from URL:", imageUrl);
+                    alert("Couldn't load the image. Please try again.");
+                    uploadArea.innerHTML = '<i class="fas fa-cloud-upload-alt"></i><p>Drag & drop an image or PDF here, or click to browse</p>';
+                };
+
+                originalImage.src = imageUrl;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while processing the file: ' + error.message);
+                uploadArea.innerHTML = '<i class="fas fa-cloud-upload-alt"></i><p>Drag & drop an image or PDF here, or click to browse</p>';
+            });
+        }
+        
+        // Canvas selection
+        canvas.addEventListener('mousedown', startSelection);
+        canvas.addEventListener('mousemove', updateSelection);
+        canvas.addEventListener('mouseup', endSelection);
+        canvas.addEventListener('mouseleave', cancelSelection);
+        
+        function startSelection(e) {
+            isSelecting = true;
+            
+            // Get the position of the click relative to the canvas
+            const rect = canvas.getBoundingClientRect();
+            startX = e.clientX - rect.left;
+            startY = e.clientY - rect.top;
+            
+            // Clear previous selection
+            resetSelection();
+        }
+        
+        function updateSelection(e) {
+            if (!isSelecting) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            endX = e.clientX - rect.left;
+            endY = e.clientY - rect.top;
+            
+            // Redraw the image and selection
+            redrawCanvas();
+        }
+        
+        function endSelection() {
+            if (!isSelecting) return;
+            isSelecting = false;
+            
+            // Store selection
+            if (startX !== endX && startY !== endY) {
+                selectionBox = {
+                    x: Math.min(startX, endX),
+                    y: Math.min(startY, endY),
+                    width: Math.abs(endX - startX),
+                    height: Math.abs(endY - startY)
+                };
+                processRegionBtn.disabled = false;
+            }
+        }
+        
+        function cancelSelection() {
+            isSelecting = false;
+        }
+        
+        function redrawCanvas() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw image
+            ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
+            
+            // Draw selection rectangle
+            if (isSelecting) {
+                const width = endX - startX;
+                const height = endY - startY;
+                
+                ctx.strokeStyle = '#f72585';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(startX, startY, width, height);
+                
+                // Semi-transparent fill
+                ctx.fillStyle = 'rgba(247, 37, 133, 0.2)';
+                ctx.fillRect(startX, startY, width, height);
+            } else if (selectionBox) {
+                // Draw stored selection
+                ctx.strokeStyle = '#f72585';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(selectionBox.x, selectionBox.y, selectionBox.width, selectionBox.height);
+                
+                // Semi-transparent fill
+                ctx.fillStyle = 'rgba(247, 37, 133, 0.2)';
+                ctx.fillRect(selectionBox.x, selectionBox.y, selectionBox.width, selectionBox.height);
+            }
+        }
+        
+        function resetSelection() {
+            selectionBox = null;
+            processRegionBtn.disabled = true;
+            
+            if (originalImage) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
+            }
+        }
+        
+        // Process selected region
+        processRegionBtn.addEventListener('click', () => {
+            if (!selectionBox || !currentImagePath) return;
+            
+            // Calculate the actual coordinates relative to the original image
+            const scaleX = originalImage.width / canvas.width;
+            const scaleY = originalImage.height / canvas.height;
+            
+            const scaledSelection = {
+                x: Math.floor(selectionBox.x * scaleX),
+                y: Math.floor(selectionBox.y * scaleY),
+                width: Math.floor(selectionBox.width * scaleX),
+                height: Math.floor(selectionBox.height * scaleY)
+            };
+            
+            // Show loading indicator
+            processRegionBtn.disabled = true;
+            processRegionBtn.innerHTML = '<div class="loading"></div> Processing...';
+            
+            // Make sure we're sending just the filename, not a path with "uploads/" in it
+            const pathToSend = currentImagePath.replace('uploads/', '');
+            console.log("Sending image path for processing:", pathToSend);
+            
+            fetch('/process_region', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    image_path: pathToSend,
+                    region: [scaledSelection.x, scaledSelection.y, scaledSelection.width, scaledSelection.height]
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    extractedTextArea.value = data.text;
+                    speakBtn.disabled = false;
+                }
+                
+                processRegionBtn.innerHTML = '<i class="fas fa-crop-alt"></i> Process Selected Region';
+                processRegionBtn.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while processing the region');
+                processRegionBtn.innerHTML = '<i class="fas fa-crop-alt"></i> Process Selected Region';
+                processRegionBtn.disabled = false;
+            });
+        });
+        
+        // Reset selection button
+        resetSelectionBtn.addEventListener('click', resetSelection);
+        
+        // Update displayed slider values
+        rateSlider.addEventListener('input', () => {
+            rateValue.textContent = rateSlider.value;
+        });
+        
+        volumeSlider.addEventListener('input', () => {
+            volumeValue.textContent = volumeSlider.value;
+        });
+        
+        // Update voice indicator when voice changes
+        voiceSelect.addEventListener('change', () => {
+            const voiceName = voiceSelect.options[voiceSelect.selectedIndex].text;
+            document.getElementById('voice-name').textContent = voiceName;
+            
+            // Change icon based on voice type
+            const voiceIcon = document.querySelector('#voice-indicator i');
+            const voiceValue = voiceSelect.value;
+            
+            // Premium voices (Google TTS)
+            const premiumVoices = ['obama', 'billgates', 'morgan', 'oprah', 'british', 'australian'];
+            const isPremium = premiumVoices.includes(voiceValue);
+            
+            // Show loading time warning for premium voices
+            document.querySelector('.premium-badge').style.display = isPremium ? 'block' : 'none';
+            
+            if (voiceValue === 'male' || voiceValue === 'billgates' || voiceValue === 'obama' || voiceValue === 'morgan') {
+                voiceIcon.className = 'fas fa-male';
+            } else if (voiceValue === 'female' || voiceValue === 'oprah') {
+                voiceIcon.className = 'fas fa-female';
+            } else if (voiceValue === 'british') {
+                voiceIcon.className = 'fas fa-crown';
+            } else if (voiceValue === 'australian') {
+                voiceIcon.className = 'fas fa-globe-asia';
+            } else {
+                voiceIcon.className = 'fas fa-user';
+            }
+        });
+        
+        // Hide premium badge initially if default voice is selected
+        document.querySelector('.premium-badge').style.display = 'none';
+        
+        // Text-to-speech conversion
+        speakBtn.addEventListener('click', () => {
+            const text = extractedTextArea.value.trim();
+            
+            if (!text) {
+                showToast('No text to speak', 'error');
+                return;
+            }
+            
+            // Get voice settings
+            const voiceSettings = {
+                voice: voiceSelect.value,
+                rate: parseFloat(rateSlider.value),
+                volume: parseFloat(volumeSlider.value)
+            };
+            
+            // Check if it's a premium voice (Google TTS)
+            const premiumVoices = ['obama', 'billgates', 'morgan', 'oprah', 'british', 'australian'];
+            const isPremium = premiumVoices.includes(voiceSettings.voice);
+            
+            // Show loading indicator with appropriate message
+            speakBtn.disabled = true;
+            speakBtn.innerHTML = isPremium ? 
+                '<div class="loading"></div> Using Google TTS...' : 
+                '<div class="loading"></div> Converting...';
+            
+            fetch('/speak', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text: text,
+                    voice_settings: voiceSettings
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    showToast(data.error, 'error');
+                } else {
+                    // Set audio source and play
+                    audioPlayer.src = `/audio/${data.audio_path}`;
+                    audioContainer.style.display = 'flex';
+                    audioPlayer.play();
+                    showToast('Audio generated successfully', 'success');
+                }
+                
+                speakBtn.innerHTML = '<i class="fas fa-volume-up"></i> Convert to Speech';
+                speakBtn.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('An error occurred while converting text to speech', 'error');
+                speakBtn.innerHTML = '<i class="fas fa-volume-up"></i> Convert to Speech';
+                speakBtn.disabled = false;
+            });
+        });
+        
+        // Interactive helpers: toasts, text stats, copy/clear
+        const toastContainer = document.getElementById('toast-container');
+        const copyTextBtn = document.getElementById('copy-text-btn');
+        const clearTextBtn = document.getElementById('clear-text-btn');
+        const textStats = document.getElementById('text-stats');
+        
+        function showToast(message, type = 'success') {
+            if (!toastContainer) return;
+            
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type === 'error' ? 'error' : 'success'}`;
+            
+            const icon = document.createElement('div');
+            icon.className = 'toast-icon';
+            icon.innerHTML = type === 'error'
+                ? '<i class="fas fa-exclamation-circle"></i>'
+                : '<i class="fas fa-check-circle"></i>';
+            
+            const text = document.createElement('div');
+            text.textContent = message;
+            
+            const close = document.createElement('div');
+            close.className = 'toast-close';
+            close.innerHTML = '<i class="fas fa-times"></i>';
+            close.addEventListener('click', () => {
+                toastContainer.removeChild(toast);
+            });
+            
+            toast.appendChild(icon);
+            toast.appendChild(text);
+            toast.appendChild(close);
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => {
+                if (toast.parentNode === toastContainer) {
+                    toastContainer.removeChild(toast);
+                }
+            }, 4000);
+        }
+        
+        function updateTextStats() {
+            const text = extractedTextArea.value || '';
+            const chars = text.length;
+            const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+            textStats.textContent = `${chars} characters • ${words} words`;
+        }
+        
+        copyTextBtn.addEventListener('click', async () => {
+            const text = extractedTextArea.value;
+            if (!text) {
+                showToast('Nothing to copy', 'error');
+                return;
+            }
+            try {
+                await navigator.clipboard.writeText(text);
+                showToast('Text copied to clipboard', 'success');
+            } catch (e) {
+                console.error(e);
+                showToast('Could not copy text', 'error');
+            }
+        });
+        
+        clearTextBtn.addEventListener('click', () => {
+            if (!extractedTextArea.value) {
+                return;
+            }
+            extractedTextArea.value = '';
+            speakBtn.disabled = true;
+            updateTextStats();
+            showToast('Text cleared', 'success');
+        });
+        
+        extractedTextArea.addEventListener('input', updateTextStats);
+        updateTextStats();
+    </script>
+</body>
+</html>
