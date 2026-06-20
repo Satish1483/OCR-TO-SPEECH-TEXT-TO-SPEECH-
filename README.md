@@ -107,21 +107,31 @@ Voice Options:
 Default, Male, Female voices (using pyttsx3)
 Premium voices: Obama, Bill Gates, Morgan Freeman, Oprah, British, Australian (using Google TTS)
 Project Structure
-Aa18/
-├── app.py                 # Main Flask application
-├── requirements.txt        # Python dependencies
-├── templates/             # HTML templates
-│   ├── index.html        # Landing page
-│   ├── login.html        # Login page
-│   ├── register.html     # Registration page
-│   ├── dashboard.html    # Main OCR/TTS interface
-│   ├── home.html         # Home page
-│   ├── about.html        # About page
-│   └── contact.html      # Contact page
-├── static/               # Static files (CSS, JS, images)
-├── uploads/              # Directory for uploaded files (auto-created)
-├── audio/                # Directory for generated audio files (auto-created)
-└── ocr_tts.db           # SQLite database (auto-created)
+OCR-To-Speech/
+│
+├── app.py                      # Main Flask application
+├── requirements.txt            # Python dependencies
+├── ocr_tts.db                  # SQLite database (auto-created)
+│
+├── templates/
+│   ├── index.html              # Landing page
+│   ├── login.html              # Login page
+│   ├── register.html           # Registration page
+│   ├── dashboard.html          # OCR & Text-to-Speech page
+│   ├── home.html               # Home page
+│   ├── about.html              # About page
+│   └── contact.html            # Contact page
+│
+├── static/
+│   ├── css/
+│   ├── js/
+│   └── images/
+│
+├── uploads/                    # Uploaded images & PDFs
+│
+├── audio/                      # Generated speech files
+│
+└── .venv/                      # Python virtual environment
 Troubleshooting
 Tesseract Not Found
 Ensure Tesseract is installed and the path in app.py (line 5) matches your installation
