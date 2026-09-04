@@ -1,164 +1,351 @@
-OCR & Text-to-Speech Engine
-A lightweight, efficient application that extracts text from images and PDF files, then converts it to natural-sounding speech.
+# OCR & Text-to-Speech Engine
 
-Features
-Advanced OCR Engine: Accurately extracts text from diverse image formats regardless of font, layout, or orientation
-PDF Support: Extract text from PDF files (both text-based and scanned PDFs)
-Hybrid OCR Approach: Combines Tesseract and EasyOCR for optimal accuracy
-Premium TTS System: Natural-sounding speech with customizable voices, speeds, and volume
-Multiple Voice Options: Includes premium Google TTS voices (Obama, Bill Gates, Morgan Freeman, Oprah, British, Australian accents)
-Intuitive UI: Drag-and-drop file upload, region selection, and audio playback controls
-User Authentication: Secure login and registration system
-Low Latency: Optimized for fast processing and output
-Requirements
-Python 3.7+ (Python 3.14 tested)
-Tesseract OCR installed on your system (see installation instructions below)
-Poppler (optional, for scanned PDF processing)
-Installation
-Step 1: Install System Dependencies
-Tesseract OCR
-Windows: Download and install from https://github.com/UB-Mannheim/tesseract/wiki
-Default installation path: C:\Program Files\Tesseract-OCR\tesseract.exe
-macOS: brew install tesseract
-Linux: sudo apt install tesseract-ocr
-Poppler (for PDF processing - Optional but Recommended)
-Windows: Download from https://github.com/oschwartz10612/poppler-windows/releases/
-Extract and add to PATH, or pdf2image will use it automatically if in the same directory
-macOS: brew install poppler
-Linux: sudo apt install poppler-utils
-Step 2: Set Up Python Environment
-Navigate to the project directory:
+A lightweight and efficient web application that extracts text from **images and PDF files** using Optical Character Recognition (OCR) and converts the extracted text into **natural-sounding speech**.
 
-cd Aa18
-Create a virtual environment (recommended):
+## 🚀 Features
 
-# Windows
-python -m venv ..\.venv
+* 🔍 **Advanced OCR Engine** – Extracts text from images with different fonts, layouts, and orientations.
+* 📄 **PDF Support** – Supports both text-based and scanned PDF files.
+* 🤖 **Hybrid OCR** – Uses **Tesseract OCR** and **EasyOCR** for improved text recognition.
+* 🔊 **Text-to-Speech** – Converts extracted text into speech.
+* 🎙️ **Multiple Voice Options** – Supports different voices, accents, speed, and volume settings.
+* 🖱️ **User-Friendly Interface** – Easy file upload, OCR processing, and audio playback.
+* 🔐 **User Authentication** – Secure user registration and login system.
+* ⚡ **Fast Processing** – Optimized for efficient OCR and speech generation.
 
-# macOS/Linux
-python3 -m venv ../venv
-Activate the virtual environment:
+---
 
-# Windows PowerShell
-..\.venv\Scripts\Activate.ps1
+## 🛠️ Technologies Used
 
-# Windows Command Prompt
-..\.venv\Scripts\activate.bat
+| Technology    | Purpose                   |
+| ------------- | ------------------------- |
+| Python        | Backend Development       |
+| Flask         | Web Framework             |
+| Tesseract OCR | Text Extraction           |
+| EasyOCR       | Advanced OCR              |
+| OpenCV        | Image Processing          |
+| Pillow        | Image Handling            |
+| PyPDF2        | PDF Text Extraction       |
+| pdfplumber    | PDF Processing            |
+| pdf2image     | Scanned PDF Processing    |
+| pyttsx3       | Offline Text-to-Speech    |
+| gTTS          | Google Text-to-Speech     |
+| SQLite        | User Database             |
+| HTML          | Frontend Structure        |
+| CSS           | Styling                   |
+| JavaScript    | Client-Side Functionality |
 
-# macOS/Linux
-source ../venv/bin/activate
-Install required Python packages:
+---
 
-pip install -r requirements.txt
-pip install gtts  # Google Text-to-Speech (for premium voices)
-How to Run
-Method 1: Using Python Directly
-Activate your virtual environment (if using one):
+## 📁 Project Structure
 
-# Windows PowerShell
-..\.venv\Scripts\Activate.ps1
-
-# Windows Command Prompt
-..\.venv\Scripts\activate.bat
-
-# macOS/Linux
-source ../venv/bin/activate
-Run the Flask application:
-
-python app.py
-Open your browser and navigate to:
-
-http://127.0.0.1:5000
-Method 2: Using Virtual Environment Python Directly
-Windows:
-
-cd Aa18
-..\.venv\Scripts\python.exe app.py
-macOS/Linux:
-
-cd Aa18
-../venv/bin/python app.py
-Usage
-Start the application (see "How to Run" above)
-
-Access the web interface: Open http://127.0.0.1:5000 in your browser
-
-Register/Login:
-
-Create a new account or log in with existing credentials
-You'll be redirected to the dashboard after login
-Upload Files:
-
-Images: Drag and drop or click to upload image files (PNG, JPG, etc.)
-PDFs: Upload PDF files - text will be extracted automatically and converted to speech
-The system supports both text-based PDFs and scanned PDFs (via OCR)
-For Images:
-
-Text is automatically extracted using OCR
-Optionally select a specific region for targeted OCR
-Adjust voice settings and click "Convert to Speech"
-For PDFs:
-
-Text is automatically extracted (direct text extraction or OCR for scanned PDFs)
-Audio is automatically generated
-Play the audio using the audio player
-Voice Options:
-
-Default, Male, Female voices (using pyttsx3)
-Premium voices: Obama, Bill Gates, Morgan Freeman, Oprah, British, Australian (using Google TTS)
-Project Structure
+```text
 OCR-To-Speech/
 │
-├── app.py                      # Main Flask application
-├── requirements.txt            # Python dependencies
-├── ocr_tts.db                  # SQLite database (auto-created)
+├── app.py
+├── requirements.txt
+├── ocr_tts.db
 │
 ├── templates/
-│   ├── index.html              # Landing page
-│   ├── login.html              # Login page
-│   ├── register.html           # Registration page
-│   ├── dashboard.html          # OCR & Text-to-Speech page
-│   ├── home.html               # Home page
-│   ├── about.html              # About page
-│   └── contact.html            # Contact page
+│   ├── index.html
+│   ├── login.html
+│   ├── register.html
+│   ├── dashboard.html
+│   ├── home.html
+│   ├── about.html
+│   └── contact.html
 │
 ├── static/
 │   ├── css/
 │   ├── js/
 │   └── images/
 │
-├── uploads/                    # Uploaded images & PDFs
+├── uploads/
 │
-├── audio/                      # Generated speech files
+├── audio/
 │
-└── .venv/                      # Python virtual environment
-Troubleshooting
-Tesseract Not Found
-Ensure Tesseract is installed and the path in app.py (line 5) matches your installation
-Windows default: C:\Program Files\Tesseract-OCR\tesseract.exe
-PDF Processing Issues
-For scanned PDFs, ensure Poppler is installed
-Text-based PDFs work without Poppler
-Check console output for specific error messages
-Module Not Found Errors
-Ensure virtual environment is activated
-Run pip install -r requirements.txt again
-Verify all packages are installed: pip list
-Port Already in Use
-Change the port in app.py (last line):
-app.run(debug=True, port=5001)  # Use a different port
-Technologies Used
-OCR: Tesseract OCR, EasyOCR
-PDF Processing: PyPDF2, pdf2image, pdfplumber
-TTS: pyttsx3, gTTS (Google Text-to-Speech)
-Image Processing: OpenCV, PIL (Pillow)
-Backend: Flask
-Database: SQLite
-Frontend: HTML, CSS, JavaScript
-Notes
-The application runs in debug mode by default (for development)
-For production, use a production WSGI server like Gunicorn or uWSGI
-EasyOCR will use CPU mode if CUDA/GPU is not available (slower but functional)
-Audio files are stored in the audio/ directory
-Uploaded files are stored in the uploads/ directory
-cd "c:\Users\LATITUDE 5420 I7\OneDrive\Documents\OCR-To-Speech"; & "c:/Users/LATITUDE 5420 I7/OneDrive/Documents/OCR-To-Speech/.venv/Scripts/Activate.ps1"; cd Aa18; python app.py
+└── .venv/
+```
+
+---
+
+# ⚙️ Installation
+
+## 1. Clone the Repository
+
+```bash
+git clone https://github.com/Satish1483/OCR-TO-SPEECH.git
+```
+
+Navigate to the project folder:
+
+```bash
+cd OCR-TO-SPEECH
+```
+
+---
+
+## 2. Install Tesseract OCR
+
+### Windows
+
+Install Tesseract OCR and ensure the executable path is configured correctly:
+
+```text
+C:\Program Files\Tesseract-OCR\tesseract.exe
+```
+
+In `app.py`, configure the path if required:
+
+```python
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+```
+
+### macOS
+
+```bash
+brew install tesseract
+```
+
+### Linux
+
+```bash
+sudo apt install tesseract-ocr
+```
+
+---
+
+## 3. Install Poppler (Optional)
+
+Poppler is recommended for processing scanned PDF files.
+
+### Windows
+
+Download and install Poppler, then add it to your system PATH.
+
+### macOS
+
+```bash
+brew install poppler
+```
+
+### Linux
+
+```bash
+sudo apt install poppler-utils
+```
+
+---
+
+## 4. Create a Virtual Environment
+
+### Windows
+
+```bash
+python -m venv .venv
+```
+
+### macOS/Linux
+
+```bash
+python3 -m venv .venv
+```
+
+---
+
+## 5. Activate the Virtual Environment
+
+### Windows PowerShell
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+### Windows Command Prompt
+
+```cmd
+.\.venv\Scripts\activate.bat
+```
+
+### macOS/Linux
+
+```bash
+source .venv/bin/activate
+```
+
+---
+
+## 6. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Install Google Text-to-Speech:
+
+```bash
+pip install gtts
+```
+
+---
+
+# ▶️ How to Run
+
+Navigate to the project directory:
+
+```powershell
+cd "C:\Users\YourUsername\OneDrive\Documents\OCR-To-Speech\Aa18"
+```
+
+Activate the virtual environment:
+
+```powershell
+..\ .venv\Scripts\Activate.ps1
+```
+
+Then run the Flask application:
+
+```bash
+python app.py
+```
+
+Alternatively, run it directly:
+
+```powershell
+cd "C:\Users\YourUsername\OneDrive\Documents\OCR-To-Speech"
+& ".\.venv\Scripts\python.exe" ".\Aa18\app.py"
+```
+
+After starting the application, open your browser and visit:
+
+```text
+http://127.0.0.1:5000
+```
+
+---
+
+# 💻 Usage
+
+## 1. Register or Login
+
+Create a new account or log in using an existing account.
+
+## 2. Upload a File
+
+The application supports:
+
+* PNG
+* JPG
+* JPEG
+* PDF
+
+## 3. Extract Text
+
+For images, the system uses OCR to extract text.
+
+For PDFs:
+
+* Text-based PDFs are processed directly.
+* Scanned PDFs are converted into images and processed using OCR.
+
+## 4. Convert Text to Speech
+
+After extracting the text:
+
+* Select a voice.
+* Adjust speech speed.
+* Adjust volume.
+* Click **Convert to Speech**.
+
+The generated audio can then be played using the built-in audio player.
+
+---
+
+# 🎙️ Voice Options
+
+The application supports:
+
+* Default Voice
+* Male Voice
+* Female Voice
+* Different accents and language options through Google Text-to-Speech.
+
+Voice availability may depend on the operating system and installed speech engines.
+
+---
+
+# 🔧 Troubleshooting
+
+## Tesseract Not Found
+
+Make sure Tesseract OCR is installed and the path is correctly configured:
+
+```python
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+```
+
+---
+
+## Module Not Found Error
+
+Activate your virtual environment and reinstall dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+You can verify installed packages using:
+
+```bash
+pip list
+```
+
+---
+
+## PDF Processing Issues
+
+For scanned PDFs, make sure **Poppler** is installed correctly.
+
+Text-based PDFs can usually be processed without Poppler.
+
+---
+
+## Port Already in Use
+
+Change the port in `app.py`:
+
+```python
+app.run(debug=True, port=5001)
+```
+
+Then open:
+
+```text
+http://127.0.0.1:5001
+```
+
+---
+
+# 📌 Future Improvements
+
+* Support for more languages.
+* Improved voice customization.
+* Cloud-based OCR integration.
+* Download generated audio files.
+* OCR accuracy improvements.
+* Dark mode support.
+* Deployment using Docker or cloud platforms.
+
+---
+
+# 👨‍💻 Author
+
+**Satish Hanji**
+
+GitHub: `https://github.com/Satish1483`
+
+---
+
+## ⭐ Support
+
+If you like this project, please consider giving the repository a **star ⭐**.
